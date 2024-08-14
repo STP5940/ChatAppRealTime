@@ -151,7 +151,7 @@
         .sticker-selector {
             display: none;
             position: absolute;
-            bottom: 16%;
+            bottom: 10%;
             background: #fff;
             border: 1px solid #ddd;
             padding: 5px;
@@ -180,6 +180,14 @@
             flex: 1;
             margin-right: 10px;
             resize: none; /* Prevents resizing */
+        }
+
+        .auto-resize-textarea {
+            width: 100%;
+            min-height: 50px;
+            max-height: 300px;
+            overflow-y: hidden;
+            resize: none;
         }
 
         #typing {
@@ -240,7 +248,10 @@
                 <button id="stickerButton" class="btn btn-secondary">Stickers</button>
             </div> -->
             <div class="input-group">
-                <textarea id="messageInput" class="form-control" rows="2" autocomplete="off" placeholder="พิมพ์ข้อความของคุณ..."></textarea>
+                <textarea id="messageInput" class="form-control auto-resize-textarea" rows="1" autocomplete="off" placeholder="พิมพ์ข้อความของคุณ..."></textarea>
+                <button id="sendButton" class="btn btn-primary">
+                    <i class="fa fa-paper-plane" aria-hidden="true"></i> Send
+                </button>
                 <button id="stickerButton" class="btn btn-secondary">Stickers</button>
             </div>
         </div>
@@ -382,6 +393,10 @@
             event.stopPropagation();
             elements.stickerSelector.style.display = elements.stickerSelector.style.display === 'none' || elements.stickerSelector.style.display === '' ? 'flex' : 'none';
         };
+
+        elements.sendButton.onclick = (event) => {
+            sendMessage();
+        };
     
         document.addEventListener('click', (event) => {
             if (!elements.stickerSelector.contains(event.target) && elements.stickerSelector.style.display === 'flex') {
@@ -400,6 +415,8 @@
             if (text && username) {
                 socket.emit('chat message', { username, text, timestamp: new Date().toISOString() });
                 elements.messageInput.value = '';
+                elements.messageInput.style.height = 'auto'; // คืนค่าความสูงของ textarea กลับไปเป็นค่าเริ่มต้น
+                elements.messageInput.style.overflowY = 'hidden';
                 socket.emit('stop typing');
             }
         };
@@ -409,6 +426,33 @@
                 socket.emit('chat message', { username, sticker, timestamp: new Date().toISOString() });
             }
         };
+
+        // const textarea = document.querySelector('.auto-resize-textarea');
+
+        // textarea.addEventListener('input', () => {
+        //     textarea.style.height = 'auto';
+        //     textarea.style.height = `${textarea.scrollHeight}px`;
+        // });
     </script>    
+
+    <script>
+        const textarea = document.querySelector('.auto-resize-textarea');
+        const lineHeight = parseInt(window.getComputedStyle(textarea).lineHeight, 10);
+        const maxLines = 8; // กำหนดจำนวนบรรทัดสูงสุดที่ต้องการ
+
+        textarea.addEventListener('input', () => {
+            textarea.style.height = 'auto'; // ปรับความสูงอัตโนมัติ
+            const currentHeight = textarea.scrollHeight;
+            const maxHeight = lineHeight * maxLines;
+
+            if (currentHeight > maxHeight) {
+                textarea.style.height = `${maxHeight}px`;
+                textarea.style.overflowY = 'scroll'; // แสดง scrollbar เมื่อเกิน 8 บรรทัด
+            } else {
+                textarea.style.height = `${currentHeight}px`;
+                textarea.style.overflowY = 'hidden'; // ซ่อน scrollbar หากมีบรรทัดไม่เกิน 8 บรรทัด
+            }
+        });
+    </script>
 </body>
 </html>
