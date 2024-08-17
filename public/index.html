@@ -1,458 +1,502 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Full-Screen Chat</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            background-color: #f1f1f1;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full-Screen Chat</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background-color: #f1f1f1;
+    }
 
-        .navbar {
-            background-color: #1080f8cd;
-            /* 007bff */
-        }
+    .navbar {
+      background-color: #1080f8cd;
+      /* 007bff */
+    }
 
-        .navbar-brand {
-            color: #fff !important;
-            padding-left: 1%;
-        }
+    .navbar-brand {
+      color: #fff !important;
+      padding-left: 1%;
+    }
 
-        .online-users {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            color: #fff;
-            font-size: 16px;
-        }
+    .online-users {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      color: #fff;
+      font-size: 16px;
+    }
 
-        .icon-users {
-            position: absolute;
-            right: 145px;
-            top: 23px;
-            color: #fff;
-            font-size: 16px;
-        }
+    .icon-users {
+      position: absolute;
+      right: 145px;
+      top: 23px;
+      color: #fff;
+      font-size: 16px;
+    }
 
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            max-height: 100vh;
-            overflow: hidden;
-        }
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      max-height: 100vh;
+      overflow: hidden;
+    }
 
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px;
-            background-color: #fff;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-            scroll-behavior: smooth; /* เพิ่มการเลื่อนที่ราบรื่น */
-        }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      scroll-behavior: smooth;
+      /* เพิ่มการเลื่อนที่ราบรื่น */
+    }
 
-        .chat-input {
-            display: flex;
-            flex-direction: column;
-            border-top: 1px solid #ddd;
-            padding: 10px;
-            background-color: #fff;
-        }
+    .chat-input {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid #ddd;
+      padding: 10px;
+      background-color: #fff;
+    }
 
-        .input-group {
-            display: flex;
-            align-items: center;
-        }
+    .input-group {
+      display: flex;
+      align-items: center;
+    }
 
-        .chat-input input {
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 4px;
-            flex: 1;
-            margin-right: 10px;
-        }
+    .chat-input input {
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 4px;
+      flex: 1;
+      margin-right: 10px;
+    }
 
-        .chat-input button {
-            border: none;
-            /* background-color: #007bff; */
-            color: #fff;
-            padding: 10px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+    .chat-input button {
+      border: none;
+      /* background-color: #007bff; */
+      color: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-        .chat-input button:hover {
-            /* background-color: #0056b3; */
-        }
+    .chat-input button:hover {
+      /* background-color: #0056b3; */
+    }
 
-        .message {
-            margin-bottom: 10px;
-        }
+    .message {
+      margin-bottom: 10px;
+    }
 
-        .message.user {
-            text-align: right;
-        }
+    .message.user {
+      text-align: right;
+    }
 
-        .message .username {
-            /* font-weight: bold; */
-            margin-bottom: 4px;
-        }
+    .message .username {
+      /* font-weight: bold; */
+      margin-bottom: 4px;
+    }
 
-        .message-content {
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px;
-            border-radius: 4px;
-            display: inline-block;
-            white-space: pre-wrap; /* Ensures new lines are preserved */
-            text-align: left; /* Aligns text to the left */
-        }
+    .message-content {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      display: inline-block;
+      white-space: pre-wrap;
+      /* Ensures new lines are preserved */
+      text-align: left;
+      /* Aligns text to the left */
+    }
 
-        .message.user .message-content {
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px;
-            border-radius: 4px;
-            display: inline-block;
-        }
+    .message.user .message-content {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      display: inline-block;
+    }
 
-        .message.other .message-content {
-            background-color: #a0a0a0;
-            padding: 10px;
-            border-radius: 4px;
-            display: inline-block;
-        }
+    .message.other .message-content {
+      background-color: #a0a0a0;
+      padding: 10px;
+      border-radius: 4px;
+      display: inline-block;
+    }
 
-        .message-content a {
-            color: #fff; /* สีของลิงก์เป็นสีขาว */
-            text-decoration: underline; /* ขีดเส้นใต้ลิงก์ */
-        }
+    .message-content a {
+      color: #fff;
+      /* สีของลิงก์เป็นสีขาว */
+      text-decoration: underline;
+      /* ขีดเส้นใต้ลิงก์ */
+    }
 
-        .message-content a:hover {
-            color: #ddd; /* สีของลิงก์เมื่อเอาเมาส์ไปวาง */
-        }
+    .message-content a:hover {
+      color: #ddd;
+      /* สีของลิงก์เมื่อเอาเมาส์ไปวาง */
+    }
 
-        .timestamp {
-            font-size: 0.7em;
-            color: #888;
-            margin-top: 2px;
-        }
+    .timestamp {
+      font-size: 0.7em;
+      color: #888;
+      margin-top: 2px;
+    }
 
-        .sticker-selector {
-            display: none;
-            position: absolute;
-            bottom: 10%;
-            background: #fff;
-            border: 1px solid #ddd;
-            padding: 5px;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            z-index: 1000;
-        }
+    .sticker-selector {
+      display: none;
+      position: absolute;
+      bottom: 10%;
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 5px;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
 
-        .sticker-selector .sticker {
-            /* width: 70px; */
-            height: 70px; /* ขนาดใหม่ของสติกเกอร์ */
-            margin: 10px;
-            cursor: pointer;
-        }
+    .sticker-selector .sticker {
+      /* width: 70px; */
+      height: 70px;
+      /* ขนาดใหม่ของสติกเกอร์ */
+      margin: 10px;
+      cursor: pointer;
+    }
 
-        .sticker-img {
-            width: 15%; /* ขนาดใหม่ของสติกเกอร์ */
-            /* height: 60px; */
-            margin: 5px;
-        }
+    .sticker-img {
+      width: 15%;
+      /* ขนาดใหม่ของสติกเกอร์ */
+      /* height: 60px; */
+      margin: 5px;
+    }
 
-        .chat-input textarea {
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 4px;
-            flex: 1;
-            margin-right: 10px;
-            resize: none; /* Prevents resizing */
-        }
+    .chat-input textarea {
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 4px;
+      flex: 1;
+      margin-right: 10px;
+      resize: none;
+      /* Prevents resizing */
+    }
 
-        .auto-resize-textarea {
-            width: 100%;
-            min-height: 50px;
-            max-height: 300px;
-            overflow-y: hidden;
-            resize: none;
-        }
+    .auto-resize-textarea {
+      width: 100%;
+      min-height: 50px;
+      max-height: 300px;
+      overflow-y: hidden;
+      resize: none;
+    }
 
-        #typing {
-            font-style: italic;
-            color: #888;
-            margin: 10px;
-        }
+    #typing {
+      font-style: italic;
+      color: #888;
+      margin: 10px;
+    }
 
-        #login {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+    #login {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
 
-        #login input, #login button {
-            margin-bottom: 10px;
-        }
+    #login input,
+    #login button {
+      margin-bottom: 10px;
+    }
 
-        #chat {
-            display: none;
-            flex-direction: column;
-        }
-    </style>
+    #chat {
+      display: none;
+      flex-direction: column;
+    }
+  </style>
 </head>
+
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href="#">#ChatApp</a>
-        <i class="fa fa-users icon-users" aria-hidden="true"></i>
-        <!-- <div class="online-users" id="onlineUsers">0 users online</div> -->
-        <div class="navbar-text online-users" id="onlineCount">ผู้ใช้งานออนไลน์: 0</div>
-        <!-- Add additional navbar items here if needed -->
-    </nav>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">#ChatApp</a>
+    <i class="fa fa-users icon-users" aria-hidden="true"></i>
+    <!-- <div class="online-users" id="onlineUsers">0 users online</div> -->
+    <div class="navbar-text online-users" id="onlineCount">ผู้ใช้งานออนไลน์: 0</div>
+    <!-- Add additional navbar items here if needed -->
+  </nav>
 
-    <div id="login">
-        <input id="usernameInput" class="form-control" placeholder="Enter your username" />
-        <button id="loginButton" class="btn btn-primary">Login</button>
+  <div id="login">
+    <input id="usernameInput" class="form-control" placeholder="Enter your username" />
+    <button id="loginButton" class="btn btn-primary">Login</button>
+  </div>
+
+  <div id="chat" class="chat-container">
+    <div class="chat-messages" id="messages">
+      <!-- Messages will appear here -->
     </div>
-
-    <div id="chat" class="chat-container">
-        <div class="chat-messages" id="messages">
-            <!-- Messages will appear here -->
-        </div>
-        <div id="typing" style="display: none;"></div>
-        <div class="chat-input">
-            <div id="stickerSelector" class="sticker-selector">
-                <img src="sticker1.png" class="sticker" data-sticker="sticker1.png" />
-                <img src="sticker2.png" class="sticker" data-sticker="sticker2.png" />
-                <img src="sticker3.png" class="sticker" data-sticker="sticker3.png" />
-                <img src="sticker4.webp" class="sticker" data-sticker="sticker4.webp" />
-                <!-- Add more stickers here -->
-            </div>
-            <!-- <div class="input-group">
+    <div id="typing" style="display: none;"></div>
+    <div class="chat-input">
+      <div id="stickerSelector" class="sticker-selector">
+        <img src="sticker/sticker1.png" class="sticker" data-sticker="sticker/sticker1.png" />
+        <img src="sticker/sticker2.png" class="sticker" data-sticker="sticker/sticker2.png" />
+        <img src="sticker/sticker3.png" class="sticker" data-sticker="sticker/sticker3.png" />
+        <img src="sticker/sticker4.webp" class="sticker" data-sticker="sticker/sticker4.webp" />
+        <!-- Add more stickers here -->
+      </div>
+      <!-- <div class="input-group">
                 <textarea id="messageInput" class="form-control" rows="3" autocomplete="off" placeholder="Type your message..."></textarea>
                 <button id="sendButton" class="btn btn-primary">Send</button>
                 <button id="stickerButton" class="btn btn-secondary">Stickers</button>
             </div> -->
-            <div class="input-group">
-                <textarea id="messageInput" class="form-control auto-resize-textarea" rows="1" autocomplete="off" placeholder="พิมพ์ข้อความของคุณ..."></textarea>
-                <button id="sendButton" class="btn btn-primary">
-                    <i class="fa fa-paper-plane" aria-hidden="true"></i> Send
-                </button>
-                <button id="stickerButton" class="btn btn-secondary">Stickers</button>
-            </div>
-        </div>
+      <div class="input-group">
+        <textarea id="messageInput" class="form-control auto-resize-textarea" rows="1" autocomplete="off" placeholder="พิมพ์ข้อความของคุณ..."></textarea>
+        <button id="sendButton" class="btn btn-primary">
+          <i class="fa fa-paper-plane" aria-hidden="true"></i> Send
+        </button>
+        <button id="stickerButton" class="btn btn-secondary">Stickers</button>
+      </div>
     </div>
+  </div>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const socket = io();
-        let username = '';
-        let typingTimeout;
-    
-        const elements = {
-            loginDiv: document.getElementById('login'),
-            chatDiv: document.getElementById('chat'),
-            usernameInput: document.getElementById('usernameInput'),
-            messageInput: document.getElementById('messageInput'),
-            messages: document.getElementById('messages'),
-            typingDiv: document.getElementById('typing'),
-            stickerSelector: document.getElementById('stickerSelector'),
-            stickerButton: document.getElementById('stickerButton'),
-            sendButton: document.getElementById('sendButton'),
-            onlineCount: document.getElementById('onlineCount'),
-            loginButton: document.getElementById('loginButton'),
-        };
-    
-        const setCookie = (name, value, days) => {
-            const date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
-        };
-    
-        const getCookie = (name) => {
-            const nameEQ = `${name}=`;
-            const cookies = document.cookie.split(';');
-            for (const cookie of cookies) {
-                const trimmedCookie = cookie.trim();
-                if (trimmedCookie.startsWith(nameEQ)) return trimmedCookie.substring(nameEQ.length);
-            }
-            return null;
-        };
-    
-        const displayMessage = (msg, isSticker = false) => {
-            const item = document.createElement('div');
-            item.classList.add('message', msg.username === username ? 'user' : 'other');
-    
-            const timestamp = new Date(msg.timestamp).toLocaleTimeString();
-            const usernameSpan = msg.username !== username ? createElement('div', { classList: ['username'], textContent: msg.username }) : null;
-    
-            if (isSticker) {
-                const stickerImg = createElement('img', { src: msg.sticker, classList: ['sticker-img'] });
-                item.append(stickerImg, createElement('div', { classList: ['timestamp'], textContent: timestamp }));
-            } else if (msg.text) {
-                const textSpan = createElement('div', { classList: ['message-content'], innerHTML: msg.text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>') });
-                item.append(textSpan, createElement('div', { classList: ['timestamp'], textContent: timestamp }));
-            }
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const socket = io('/api/socket');
+    let username = '';
+    let typingTimeout;
 
-            // Only show username if it's not the current user
-            if (msg.username !== username) {
-                item.prepend(usernameSpan);
-            }
+    const elements = {
+      loginDiv: document.getElementById('login'),
+      chatDiv: document.getElementById('chat'),
+      usernameInput: document.getElementById('usernameInput'),
+      messageInput: document.getElementById('messageInput'),
+      messages: document.getElementById('messages'),
+      typingDiv: document.getElementById('typing'),
+      stickerSelector: document.getElementById('stickerSelector'),
+      stickerButton: document.getElementById('stickerButton'),
+      sendButton: document.getElementById('sendButton'),
+      onlineCount: document.getElementById('onlineCount'),
+      loginButton: document.getElementById('loginButton'),
+    };
 
-            elements.messages.appendChild(item);
-            elements.messages.scrollTop = elements.messages.scrollHeight;
-        };
-    
-        const createElement = (tag, { classList = [], textContent = '', innerHTML = '', src = '' } = {}) => {
-            const element = document.createElement(tag);
-            classList.forEach(cls => element.classList.add(cls));
-            if (textContent) element.textContent = textContent;
-            if (innerHTML) element.innerHTML = innerHTML;
-            if (src) element.src = src;
-            return element;
-        };
-    
-        const updateOnlineCount = (users) => {
-            elements.onlineCount.textContent = `ผู้ใช้งานออนไลน์: ${users.length}`;
-        };
-    
-        const handleUserEvent = (action, username) => {
-            const item = createElement('div', { classList: ['text-muted', 'fst-italic', 'my-2'], textContent: `→ ${username} ${action}` });
-            item.style.fontSize = '0.8em';
-            elements.messages.appendChild(item);
-            elements.messages.scrollTop = elements.messages.scrollHeight;
-        };
-    
-        const handleTyping = (username, isTyping) => {
-            if (isTyping) {
-                elements.typingDiv.textContent = 'มีคนกำลังพิมพ์...';
-                elements.typingDiv.style.display = 'block';
-                clearTimeout(typingTimeout);
-                typingTimeout = setTimeout(() => socket.emit('stop typing'), 3000);
-            } else {
-                elements.typingDiv.style.display = 'none';
-            }
-        };
-    
-        window.onload = () => {
-            username = getCookie('username');
-            if (username) {
-                socket.emit('join', username);
-                elements.loginDiv.style.display = 'none';
-                elements.chatDiv.style.display = 'flex';
-            }
-        };
-    
-        elements.loginButton.onclick = () => {
-            username = elements.usernameInput.value.trim();
-            if (username) {
-                setCookie('username', username, 7);
-                socket.emit('join', username);
-                elements.loginDiv.style.display = 'none';
-                elements.chatDiv.style.display = 'flex';
-            }
-        };
-    
-        socket.on('chat message', (msg) => {
-            displayMessage(msg, !!msg.sticker);
+    const setCookie = (name, value, days) => {
+      const date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+    };
+
+    const getCookie = (name) => {
+      const nameEQ = `${name}=`;
+      const cookies = document.cookie.split(';');
+      for (const cookie of cookies) {
+        const trimmedCookie = cookie.trim();
+        if (trimmedCookie.startsWith(nameEQ)) return trimmedCookie.substring(nameEQ.length);
+      }
+      return null;
+    };
+
+    const displayMessage = (msg, isSticker = false) => {
+      const item = document.createElement('div');
+      item.classList.add('message', msg.username === username ? 'user' : 'other');
+
+      const timestamp = new Date(msg.timestamp).toLocaleTimeString();
+      const usernameSpan = msg.username !== username ? createElement('div', {
+        classList: ['username'],
+        textContent: msg.username
+      }) : null;
+
+      if (isSticker) {
+        const stickerImg = createElement('img', {
+          src: msg.sticker,
+          classList: ['sticker-img']
         });
-    
-        socket.on('user list', updateOnlineCount);
-        socket.on('user joined', (username) => handleUserEvent('เข้าสู่ห้อง', username));
-        socket.on('user left', (username) => handleUserEvent('ออกจากห้อง', username));
-        socket.on('typing', (username) => handleTyping(username, true));
-        socket.on('stop typing', () => handleTyping(null, false));
-    
-        elements.messageInput.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            } else {
-                socket.emit('typing', username);
-                clearTimeout(typingTimeout);
-                typingTimeout = setTimeout(() => socket.emit('stop typing'), 1000);
-            }
+        item.append(stickerImg, createElement('div', {
+          classList: ['timestamp'],
+          textContent: timestamp
+        }));
+      } else if (msg.text) {
+        const textSpan = createElement('div', {
+          classList: ['message-content'],
+          innerHTML: msg.text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>')
         });
-    
-        elements.stickerButton.onclick = (event) => {
-            event.stopPropagation();
-            elements.stickerSelector.style.display = elements.stickerSelector.style.display === 'none' || elements.stickerSelector.style.display === '' ? 'flex' : 'none';
-        };
+        item.append(textSpan, createElement('div', {
+          classList: ['timestamp'],
+          textContent: timestamp
+        }));
+      }
 
-        elements.sendButton.onclick = (event) => {
-            sendMessage();
-        };
-    
-        document.addEventListener('click', (event) => {
-            if (!elements.stickerSelector.contains(event.target) && elements.stickerSelector.style.display === 'flex') {
-                elements.stickerSelector.style.display = 'none';
-            }
+      // Only show username if it's not the current user
+      if (msg.username !== username) {
+        item.prepend(usernameSpan);
+      }
+
+      elements.messages.appendChild(item);
+      elements.messages.scrollTop = elements.messages.scrollHeight;
+    };
+
+    const createElement = (tag, {
+      classList = [],
+      textContent = '',
+      innerHTML = '',
+      src = ''
+    } = {}) => {
+      const element = document.createElement(tag);
+      classList.forEach(cls => element.classList.add(cls));
+      if (textContent) element.textContent = textContent;
+      if (innerHTML) element.innerHTML = innerHTML;
+      if (src) element.src = src;
+      return element;
+    };
+
+    const updateOnlineCount = (users) => {
+      elements.onlineCount.textContent = `ผู้ใช้งานออนไลน์: ${users.length}`;
+    };
+
+    const handleUserEvent = (action, username) => {
+      const item = createElement('div', {
+        classList: ['text-muted', 'fst-italic', 'my-2'],
+        textContent: `→ ${username} ${action}`
+      });
+      item.style.fontSize = '0.8em';
+      elements.messages.appendChild(item);
+      elements.messages.scrollTop = elements.messages.scrollHeight;
+    };
+
+    const handleTyping = (username, isTyping) => {
+      if (isTyping) {
+        elements.typingDiv.textContent = 'กำลังพิมพ์...';
+        elements.typingDiv.style.display = 'block';
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => socket.emit('stop typing'), 3000);
+      } else {
+        elements.typingDiv.style.display = 'none';
+      }
+    };
+
+    window.onload = () => {
+      username = getCookie('username');
+      if (username) {
+        socket.emit('join', username);
+        elements.loginDiv.style.display = 'none';
+        elements.chatDiv.style.display = 'flex';
+      }
+    };
+
+    elements.loginButton.onclick = () => {
+      username = elements.usernameInput.value.trim();
+      if (username) {
+        setCookie('username', username, 7);
+        socket.emit('join', username);
+        elements.loginDiv.style.display = 'none';
+        elements.chatDiv.style.display = 'flex';
+      }
+    };
+
+    socket.on('chat message', (msg) => {
+      displayMessage(msg, !!msg.sticker);
+    });
+
+    socket.on('user list', updateOnlineCount);
+    socket.on('user joined', (username) => handleUserEvent('เข้าสู่ห้อง', username));
+    socket.on('user left', (username) => handleUserEvent('ออกจากห้อง', username));
+    socket.on('typing', (username) => handleTyping(username, true));
+    socket.on('stop typing', () => handleTyping(null, false));
+
+    elements.messageInput.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      } else {
+        socket.emit('typing', username);
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => socket.emit('stop typing'), 1000);
+      }
+    });
+
+    elements.stickerButton.onclick = (event) => {
+      event.stopPropagation();
+      elements.stickerSelector.style.display = elements.stickerSelector.style.display === 'none' || elements.stickerSelector.style.display === '' ? 'flex' : 'none';
+    };
+
+    elements.sendButton.onclick = (event) => {
+      sendMessage();
+    };
+
+    document.addEventListener('click', (event) => {
+      if (!elements.stickerSelector.contains(event.target) && elements.stickerSelector.style.display === 'flex') {
+        elements.stickerSelector.style.display = 'none';
+      }
+    });
+
+    document.querySelectorAll('.sticker').forEach(sticker => {
+      sticker.onclick = (event) => {
+        sendSticker(event.target.getAttribute('data-sticker'));
+      };
+    });
+
+    const sendMessage = () => {
+      const text = elements.messageInput.value.trim();
+      if (text && username) {
+        socket.emit('chat message', {
+          username,
+          text,
+          timestamp: new Date().toISOString()
         });
-    
-        document.querySelectorAll('.sticker').forEach(sticker => {
-            sticker.onclick = (event) => {
-                sendSticker(event.target.getAttribute('data-sticker'));
-            };
+        elements.messageInput.value = '';
+        elements.messageInput.style.height = 'auto'; // คืนค่าความสูงของ textarea กลับไปเป็นค่าเริ่มต้น
+        elements.messageInput.style.overflowY = 'hidden';
+        socket.emit('stop typing');
+      }
+    };
+
+    const sendSticker = (sticker) => {
+      if (username) {
+        socket.emit('chat message', {
+          username,
+          sticker,
+          timestamp: new Date().toISOString()
         });
-    
-        const sendMessage = () => {
-            const text = elements.messageInput.value.trim();
-            if (text && username) {
-                socket.emit('chat message', { username, text, timestamp: new Date().toISOString() });
-                elements.messageInput.value = '';
-                elements.messageInput.style.height = 'auto'; // คืนค่าความสูงของ textarea กลับไปเป็นค่าเริ่มต้น
-                elements.messageInput.style.overflowY = 'hidden';
-                socket.emit('stop typing');
-            }
-        };
-    
-        const sendSticker = (sticker) => {
-            if (username) {
-                socket.emit('chat message', { username, sticker, timestamp: new Date().toISOString() });
-            }
-        };
+      }
+    };
 
-        // const textarea = document.querySelector('.auto-resize-textarea');
+    // const textarea = document.querySelector('.auto-resize-textarea');
 
-        // textarea.addEventListener('input', () => {
-        //     textarea.style.height = 'auto';
-        //     textarea.style.height = `${textarea.scrollHeight}px`;
-        // });
-    </script>    
+    // textarea.addEventListener('input', () => {
+    //     textarea.style.height = 'auto';
+    //     textarea.style.height = `${textarea.scrollHeight}px`;
+    // });
+  </script>
 
-    <script>
-        const textarea = document.querySelector('.auto-resize-textarea');
-        const lineHeight = parseInt(window.getComputedStyle(textarea).lineHeight, 10);
-        const maxLines = 8; // กำหนดจำนวนบรรทัดสูงสุดที่ต้องการ
+  <script>
+    const textarea = document.querySelector('.auto-resize-textarea');
+    const lineHeight = parseInt(window.getComputedStyle(textarea).lineHeight, 10);
+    const maxLines = 8; // กำหนดจำนวนบรรทัดสูงสุดที่ต้องการ
 
-        textarea.addEventListener('input', () => {
-            textarea.style.height = 'auto'; // ปรับความสูงอัตโนมัติ
-            const currentHeight = textarea.scrollHeight;
-            const maxHeight = lineHeight * maxLines;
+    textarea.addEventListener('input', () => {
+      textarea.style.height = 'auto'; // ปรับความสูงอัตโนมัติ
+      const currentHeight = textarea.scrollHeight;
+      const maxHeight = lineHeight * maxLines;
 
-            if (currentHeight > maxHeight) {
-                textarea.style.height = `${maxHeight}px`;
-                textarea.style.overflowY = 'scroll'; // แสดง scrollbar เมื่อเกิน 8 บรรทัด
-            } else {
-                textarea.style.height = `${currentHeight}px`;
-                textarea.style.overflowY = 'hidden'; // ซ่อน scrollbar หากมีบรรทัดไม่เกิน 8 บรรทัด
-            }
-        });
-    </script>
+      if (currentHeight > maxHeight) {
+        textarea.style.height = `${maxHeight}px`;
+        textarea.style.overflowY = 'scroll'; // แสดง scrollbar เมื่อเกิน 8 บรรทัด
+      } else {
+        textarea.style.height = `${currentHeight}px`;
+        textarea.style.overflowY = 'hidden'; // ซ่อน scrollbar หากมีบรรทัดไม่เกิน 8 บรรทัด
+      }
+    });
+  </script>
 </body>
+
 </html>
